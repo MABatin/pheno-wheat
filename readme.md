@@ -45,9 +45,10 @@ pheno-wheat
 │       └── val
 └── ...
 ```
-Run `train_spike.sh` to train a model specified in the `train_spike.json` file under the key
+Run `./train_spike.sh` to train a model specified in the `train_spike.json` file under the key
 *config*.\
-Run `test_spike.sh` to test the model specified in the `test_spike.json` file under the key 
+(if permission denied error shows up use the command `chmod +x ./train_spike.sh`)\
+Run `./test_spike.sh` to test the model specified in the `test_spike.json` file under the key 
 *config* loaded from the checkpoint file 
 specified under the key *checkpoint*
 
