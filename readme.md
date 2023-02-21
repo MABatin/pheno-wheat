@@ -5,9 +5,29 @@
 After cloning the repo:\
 `cd pheno-wheat`\
 `pip install virtualenv` (if you don't already have virtualenv installed)\
-`virtualenv envwheat` to create the virtualenv for the project\
+`python3 -m virtualenv envwheat` to create the virtual environment for the project\
+`source envwheat/bin/activate` to activate virtual environment\
 Use `pip install -r requirements.txt` to install all the requirements
 
+Install mmdetection and mmsegmentation by following:
+1. mmdetection
+````
+git clone https://github.com/open-mmlab/mmdetection.git
+cd mmdetection
+pip install -v -e .
+# "-v" means verbose, or more output
+# "-e" means installing a project in editable mode,
+# thus any local modifications made to the code will take effect without reinstallation.
+````
+2. mmsegmentation
+````
+git clone https://github.com/open-mmlab/mmsegmentation.git
+cd mmsegmentation
+pip install -v -e .
+# "-v" means verbose, or more output
+# "-e" means installing a project in editable mode,
+# thus any local modifications made to the code will take effect without reinstallation.
+````
 # Instructions
 
 ---
@@ -33,7 +53,7 @@ specified under the key *checkpoint*
 
 ### 2. Spikelet Segmentation
 
-Download the [Spikelet segmentation dataset]()\
+Download the [Spikelet segmentation dataset]()
 
 - [ ] Complete the spikelet annotation 
 - [ ] Write scripts for training and testing spikelet segmentation models
