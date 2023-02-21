@@ -3,6 +3,8 @@ _base_ = [
     '../../mmdetection/configs/_base_/default_runtime.py',
     '../schedules/schedule_150e.py'
 ]
+data = dict(
+    samples_per_gpu=1)
 model = dict(
     type='CascadeRCNN',
     backbone=dict(
@@ -48,7 +50,7 @@ model = dict(
         type='CascadeRoIHead',
         num_stages=3,
         stage_loss_weights=[1, 0.5, 0.25],
-        box_roi_extractor=dict(
+        bbox_roi_extractor=dict(
             type='GenericRoIExtractor',
             aggregation='sum',
             roi_layer=dict(type='RoIAlign', output_size=7, sampling_ratio=2),
@@ -284,8 +286,8 @@ work_dir = 'work_dirs/cascade_mask_rcnn_mod_dconv'
 #             interval=1)])
 PROJECT = 'SpikeInstance'
 ENTITY = 'unholytsar'
-NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_groie_150e'
-ID = '2ksi3sere451232'  # change for different runs
+NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_groie_sablhead_150e'
+ID = '2ksi3sere451eww'  # change for different runs
 TAGS = ['150 epochs', 'pretrained backbone']
 log_config = dict(
     interval=1,
