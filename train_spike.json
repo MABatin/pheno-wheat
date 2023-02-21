@@ -1,0 +1,7 @@
+{
+    "path": "tools/detector/train.py",
+    "config": "/home/leon/pheno-wheat/configs/models/cascade_mask_rcnn_mod_dconv_c3-c5_150e_coco.py",
+    "cfg-options": {
+        "resume_from": "None"
+    }
+}

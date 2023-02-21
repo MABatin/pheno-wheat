@@ -1,0 +1,19 @@
+train - detector -- python Wheat/tools/detector/train.py Wheat/configs/models/retinanet_r50_bifpn_250e_coco.py (resume_from)
+        segmentor -- python Wheat/tools/segmentor/train.py Wheat/configs/models/fcn_unet_s5-d16_32x32_80k_v3.py
+
+test - detector -- python Wheat/tools/detector/test.py Wheat/configs/models/cascade_mask_rcnn_mod_250e_coco.py
+ --work-dir Wheat/results/SPIKE_small/cascade_mask_rcnn_mod_250e
+  --out Wheat/results/SPIKE_small/cascade_mask_rcnn_mod_250e/cascade_mask_rcnn_mod_250e.pkl
+   --show-dir Wheat/results/SPIKE_small/cascade_mask_rcnn_mod_250e
+    --eval bbox
+     --results
+      --tpfp
+      --show-score-thr=0.5
+       segmentor -- python Wheat/tools/segmentor/test.py Wheat/configs/models/fcn_unet_s5-d16_32x32_80k_v2.py Wheat/checkpoints/Trained/Spikelet_small_v2/fcn_unet_s5_d16_b1_iter_80k.pth --work-dir Wheat/results/Spikelet_small_v2/fcn_unet_s5_d16_80k_b1 --show-dir Wheat/results/Spikelet_small_v2/fcn_unet_s5_d16_80k_b1 --eval mDice mIoU
+
+draw_bbox - python Wheat/tools/misc/draw_bbox.py Wheat/results/SPIKE_small/cascade_mask_rcnn_mod_250e/ Wheat/configs/datasets/spike_instance.py Wheat/results/SPIKE_small/cascade_mask_rcnn_mod_250e/bbox/
+
+crop_bbox -
+
+
+

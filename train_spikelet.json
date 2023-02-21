@@ -1,0 +1,4 @@
+{
+    "path": "tools/segmentor/train.py",
+    "config": "configs/models/cascade_mask_rcnn_mod_250e_coco.py"
+}

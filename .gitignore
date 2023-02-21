@@ -1,0 +1,13 @@
+# created by virtualenv automatically
+\.idea
+\__pycache__
+\envwheat
+\mmdetection
+\mmsegmentation
+\results
+\work_dirs
+\data
+\checkpoints
+\experimental
+\artifacts
+#\app

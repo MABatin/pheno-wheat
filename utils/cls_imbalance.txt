@@ -1,0 +1,19 @@
+Spikelet_small_v0:
+    test: bg: 152710, spikelet: 31949, bg/sp:4.78
+    train: bg: 853913, spikelet: 132145, bg/sp:6.462
+
+Spikelet_small_v1:
+    test: bg: 181296, spikelet: 3363, bg/sp:53.909
+    train: bg: 965852, spikelet: 20206, bg/sp:47.8, bg_weight:0.51, sp_weight:24.4
+
+Spikelet_small_v2:
+    test: bg: 169166, spikelet: 15493, bg/sp:10.919
+    train: bg: 884821, spikelet: 101237, bg/sp:8.74, bg_weight:0.557, sp_weight:4.87
+
+Spikelet_small_v3:
+    test: bg: 133955, spikelet: 2044, bg/sp:65.536
+    train: bg: 965852, spikelet: 20206, bg/sp:47.8, bg_weight:0.51, sp_weight:24.4
+
+Spikelet_small_v4:
+    test: bg: 117451, spikelet: 10658, bg/sp:11.02
+    train: bg: 884821, spikelet: 101237, bg/sp:8.74, bg_weight:0.557, sp_weight:4.87

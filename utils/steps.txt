@@ -1,0 +1,8 @@
+1. Detect spikes using Cascade R-CNN / Cascade Mask R-CNN -- DONE using cascade mask rcnn
+2. Crop detected bbox / mask and save as individual spike image -- Done
+3. Enhance cropped image using image processing techniques / GAN (optional) -- SKIP for now (or not)
+4. Segment spikelets in spike images
+    - create binary mask image (.png) for each spike
+    - structure the spikelet dataset according to mmseg/datasets/custom.py
+5. Detect spikelets using U-Net++/K-net/FastFCN
+6. Estimate wheat yield from spikelet count (Equation from SlypNet paper)

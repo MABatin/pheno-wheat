@@ -1,0 +1,12 @@
+Sort of like relearning:
+1. Integrate Roboflow API in the project
+2. Train the spikelet model
+   save(old_model)
+   while True:
+       after training done get _annotate.json from Roboflow
+           if len(new_data) > len(old_data):
+               Retrain the spikelet model
+               if score(new_model) > score(old_model):
+                   delete(old_model)
+                   save(new_model)
+                   continue
