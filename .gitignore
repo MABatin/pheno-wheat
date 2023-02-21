@@ -11,3 +11,5 @@
 \experimental
 \artifacts
 #\app
+*.json
+

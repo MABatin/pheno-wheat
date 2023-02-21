@@ -47,10 +47,13 @@ pheno-wheat
 ```
 Run `./train_spike.sh` to train a model specified in the `train_spike.json` file under the key
 *config*.\
-(if permission denied error shows up use the command `chmod +x ./train_spike.sh`)\
+(create from `train_spike.json.template`)
+
+(if permission denied error shows up use the command `chmod +x ./train_spike.sh`)
+
 Run `./test_spike.sh` to test the model specified in the `test_spike.json` file under the key 
-*config* loaded from the checkpoint file 
-specified under the key *checkpoint*
+*config* loaded from the checkpoint file specified under the key *checkpoint*. \
+(create from `test_spike.json.template`)
 
 ### 2. Spikelet Segmentation
 

@@ -1,0 +1,7 @@
+{
+    "path": "tools/detector/train.py",
+    "config": "path/to/model/config/file",
+    "cfg-options": {
+        "resume_from": "None"
+    }
+}

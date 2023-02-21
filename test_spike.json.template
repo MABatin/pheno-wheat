@@ -1,0 +1,16 @@
+{
+    "path": "tools/detector/test.py",
+    "config": "path/to/model/config/file",
+    "checkpoint": "path/to/model/checkpoint/*.pth",
+    "work-dir": "/results/SPIKE_main/*/",
+    "out": "/results/SPIKE_main/*/*.pkl",
+    "show-dir": "/results/SPIKE_main/*/",
+    "eval": "bbox segm",
+    "results": "True",
+    "tpfp": "True",
+    "draw": "True",
+    "show-score-thr": 0.5}
+//    "cfg-options": {
+//        "data.test.samples_per_gpu": 2
+//    }
+//}

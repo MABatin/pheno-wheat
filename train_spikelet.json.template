@@ -1,0 +1,4 @@
+{
+    "path": "tools/segmentor/train.py",
+    "config": "path/to/model/config/file"
+}
