@@ -1,4 +1,7 @@
 {
     "path": "tools/segmentor/train.py",
-    "config": "path/to/model/config/file"
+    "config": "path/to/model/config/file",
+    "cfg-options": {
+        "resume_from": "None"
+    }
 }

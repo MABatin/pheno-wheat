@@ -76,7 +76,7 @@ SecretStorage
 sentry-sdk
 setproctitle
 six
-smmap==5.0.0
+smmap
 terminaltables
 tomli
 torch==1.13.1
