@@ -198,19 +198,21 @@ model = dict(
 # Set up working dir to save files and logs.
 work_dir = 'Wheat/work_dirs/cascade_rcnn_mod/'
 resume_from = work_dir + 'epoch_174.pth'
+TAGS = ['baseline']
 log_config = dict(
     interval=1,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(
-            type='WandbLoggerHook',
-            init_kwargs={'entity': 'unholytsar',
-                         'project': 'SpikeDetection_real',
-                         'name': 'cascade_rcnn_mod_250e_softnms',
-                         'dir': work_dir,
+            type='MMDetWandbHook',
+            init_kwargs={'dir': work_dir,
                          'resume': 'allow',
-                         'id': '2ksi3lzt'},
-            interval=1)])
+                         'tags': TAGS},
+            interval=1,
+            num_eval_images=0,
+            bbox_score_thr=0.5,
+            log_checkpoint=False,
+            log_checkpoint_metadata=False)])
 
 auto_scale_lr = dict(enable=False, base_batch_size=16)
 # Change the evaluation metric since we use customized dataset.

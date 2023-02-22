@@ -13,6 +13,11 @@ with open("train_spike.json", 'r') as f:
 if any(cfg_options):
     sh = f'python {path} {config} --cfg-options'
     for key, value in cfg_options.items():
+        if key == "log_config":
+            if any(cfg_options[key]):
+                for k, v in value.items():
+                    sh = sh + ' ' + f'{key}.hooks.1.init_kwargs.{k}={v}'
+            continue
         sh = sh + ' ' + f'{key}={value}'
 else:
     sh = f'python {path} {config}'

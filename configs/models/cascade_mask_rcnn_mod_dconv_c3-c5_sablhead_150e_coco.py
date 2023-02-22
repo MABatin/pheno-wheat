@@ -3,6 +3,8 @@ _base_ = [
     '../../mmdetection/configs/_base_/default_runtime.py',
     '../schedules/schedule_150e.py'
 ]
+data = dict(
+    samples_per_gpu=2)
 model = dict(
     type='CascadeRCNN',
     backbone=dict(
@@ -55,55 +57,82 @@ model = dict(
             featmap_strides=[4, 8, 16, 32]),
         bbox_head=[
             dict(
-                type='Shared2FCBBoxHead',
-                in_channels=256,
-                fc_out_channels=1024,
-                roi_feat_size=7,
+                type='SABLHead',
                 num_classes=1,
-                bbox_coder=dict(
-                    type='DeltaXYWHBBoxCoder',
-                    target_means=[0., 0., 0., 0.],
-                    target_stds=[0.1, 0.1, 0.2, 0.2]),
+                cls_in_channels=256,
+                reg_in_channels=256,
+                roi_feat_size=7,
+                reg_feat_up_ratio=2,
+                reg_pre_kernel=3,
+                reg_post_kernel=3,
+                reg_pre_num=2,
+                reg_post_num=1,
+                cls_out_channels=1024,
+                reg_offset_out_channels=256,
+                reg_cls_out_channels=256,
+                num_cls_fcs=1,
+                num_reg_fcs=0,
                 reg_class_agnostic=True,
+                norm_cfg=None,
+                bbox_coder=dict(
+                    type='BucketingBBoxCoder', num_buckets=14, scale_factor=1.7),
                 loss_cls=dict(
-                    type='CrossEntropyLoss',
-                    use_sigmoid=False,
-                    loss_weight=1.0),
-                loss_bbox=dict(type='SmoothL1Loss', beta=1.0,
-                               loss_weight=1.0)),
+                    type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+                loss_bbox_cls=dict(
+                    type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),
+                loss_bbox_reg=dict(type='SmoothL1Loss', beta=0.1,
+                                   loss_weight=1.0)),
             dict(
-                type='Shared2FCBBoxHead',
-                in_channels=256,
-                fc_out_channels=1024,
-                roi_feat_size=7,
+                type='SABLHead',
                 num_classes=1,
-                bbox_coder=dict(
-                    type='DeltaXYWHBBoxCoder',
-                    target_means=[0., 0., 0., 0.],
-                    target_stds=[0.05, 0.05, 0.1, 0.1]),
+                cls_in_channels=256,
+                reg_in_channels=256,
+                roi_feat_size=7,
+                reg_feat_up_ratio=2,
+                reg_pre_kernel=3,
+                reg_post_kernel=3,
+                reg_pre_num=2,
+                reg_post_num=1,
+                cls_out_channels=1024,
+                reg_offset_out_channels=256,
+                reg_cls_out_channels=256,
+                num_cls_fcs=1,
+                num_reg_fcs=0,
                 reg_class_agnostic=True,
+                norm_cfg=None,
+                bbox_coder=dict(
+                    type='BucketingBBoxCoder', num_buckets=14, scale_factor=1.5),
                 loss_cls=dict(
-                    type='CrossEntropyLoss',
-                    use_sigmoid=False,
-                    loss_weight=1.0),
-                loss_bbox=dict(type='SmoothL1Loss', beta=1.0,
-                               loss_weight=1.0)),
+                    type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+                loss_bbox_cls=dict(
+                    type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),
+                loss_bbox_reg=dict(type='SmoothL1Loss', beta=0.1,
+                                   loss_weight=1.0)),
             dict(
-                type='Shared2FCBBoxHead',
-                in_channels=256,
-                fc_out_channels=1024,
-                roi_feat_size=7,
+                type='SABLHead',
                 num_classes=1,
-                bbox_coder=dict(
-                    type='DeltaXYWHBBoxCoder',
-                    target_means=[0., 0., 0., 0.],
-                    target_stds=[0.033, 0.033, 0.067, 0.067]),
+                cls_in_channels=256,
+                reg_in_channels=256,
+                roi_feat_size=7,
+                reg_feat_up_ratio=2,
+                reg_pre_kernel=3,
+                reg_post_kernel=3,
+                reg_pre_num=2,
+                reg_post_num=1,
+                cls_out_channels=1024,
+                reg_offset_out_channels=256,
+                reg_cls_out_channels=256,
+                num_cls_fcs=1,
+                num_reg_fcs=0,
                 reg_class_agnostic=True,
+                norm_cfg=None,
+                bbox_coder=dict(
+                    type='BucketingBBoxCoder', num_buckets=14, scale_factor=1.3),
                 loss_cls=dict(
-                    type='CrossEntropyLoss',
-                    use_sigmoid=False,
-                    loss_weight=1.0),
-                loss_bbox=dict(type='SmoothL1Loss', beta=1.0, loss_weight=1.0))
+                    type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+                loss_bbox_cls=dict(
+                    type='CrossEntropyLoss', use_sigmoid=True, loss_weight=1.0),
+                loss_bbox_reg=dict(type='SmoothL1Loss', beta=0.1, loss_weight=1.0))
         ],
         mask_roi_extractor=dict(
             type='SingleRoIExtractor',
@@ -211,24 +240,7 @@ model = dict(
 # Set up working dir to save files and logs.
 work_dir = 'work_dirs/cascade_mask_rcnn_mod_dconv'
 # resume_from = work_dir + 'epoch_18.pth'
-# log_config = dict(
-#     interval=1,
-#     hooks=[
-#         dict(type='TextLoggerHook'),
-#         dict(
-#             type='WandbLoggerHook',
-#             init_kwargs={'entity': 'unholytsar',
-#                          'project': 'SpikeInstance',
-#                          'name': 'cascade_mask_rcnn_mod_dconv_c3-c5_250e',
-#                          'dir': work_dir,
-#                          'resume': 'allow',
-#                          'id': '2ksi3serejio'},
-#             interval=1)])
-# PROJECT = 'SpikeInstance'
-# ENTITY = 'unholytsar'
-# NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_150e_pre'
-# ID = '2ksi3sere4549'  # change for different runs
-TAGS = ['150 epochs', 'pretrained backbone']
+TAGS = ['150 epochs']
 log_config = dict(
     interval=1,
     hooks=[

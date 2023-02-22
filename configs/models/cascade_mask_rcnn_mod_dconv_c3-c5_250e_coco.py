@@ -224,22 +224,20 @@ work_dir = 'work_dirs/cascade_mask_rcnn_mod_dconv'
 #                          'resume': 'allow',
 #                          'id': '2ksi3serejio'},
 #             interval=1)])
-PROJECT = 'SpikeInstance'
-ENTITY = 'unholytsar'
-NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_250e_pre'
-ID = '2ksi3sere4561'  # change for different runs
+# PROJECT = 'SpikeInstance'
+# ENTITY = 'unholytsar'
+# NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_250e_pre'
+# ID = '2ksi3sere4561'  # change for different runs
+TAGS = ['250e']
 log_config = dict(
     interval=1,
     hooks=[
         dict(type='TextLoggerHook'),
         dict(
             type='MMDetWandbHook',
-            init_kwargs={'entity': ENTITY,
-                         'project': PROJECT,
-                         'name': NAME,
-                         'dir': work_dir,
+            init_kwargs={'dir': work_dir,
                          'resume': 'allow',
-                         'id': ID},
+                         'tags': TAGS},
             interval=1,
             num_eval_images=0,
             bbox_score_thr=0.5,

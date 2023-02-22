@@ -284,10 +284,10 @@ work_dir = 'work_dirs/cascade_mask_rcnn_mod_dconv'
 #                          'resume': 'allow',
 #                          'id': '2ksi3serejio'},
 #             interval=1)])
-PROJECT = 'SpikeInstance'
-ENTITY = 'unholytsar'
-NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_groie_sablhead_150e'
-ID = '2ksi3sere451eww'  # change for different runs
+# PROJECT = 'SpikeInstance'
+# ENTITY = 'unholytsar'
+# NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_groie_sablhead_150e'
+# ID = '2ksi3sere451eww'  # change for different runs
 TAGS = ['150 epochs', 'pretrained backbone']
 log_config = dict(
     interval=1,
@@ -295,12 +295,8 @@ log_config = dict(
         dict(type='TextLoggerHook'),
         dict(
             type='MMDetWandbHook',
-            init_kwargs={'entity': ENTITY,
-                         'project': PROJECT,
-                         'name': NAME,
-                         'dir': work_dir,
+            init_kwargs={'dir': work_dir,
                          'resume': 'allow',
-                         'id': ID,
                          'tags': TAGS},
             interval=1,
             num_eval_images=0,
@@ -309,6 +305,7 @@ log_config = dict(
             log_checkpoint_metadata=False)])
 
 auto_scale_lr = dict(enable=False, base_batch_size=16)
+optimizer = dict(lr=0.005)
 # Change the evaluation metric since we use customized dataset.
 # We can set the evaluation interval to reduce the evaluation times
 evaluation = dict(interval=1, metric=['bbox', 'segm'], save_best='bbox_mAP')
