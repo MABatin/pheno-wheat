@@ -310,6 +310,7 @@ log_config = dict(
             log_checkpoint_metadata=False)])
 
 auto_scale_lr = dict(enable=False, base_batch_size=16)
+optimizer = dict(lr=0.005)
 # Change the evaluation metric since we use customized dataset.
 # We can set the evaluation interval to reduce the evaluation times
 evaluation = dict(interval=1, metric=['bbox', 'segm'], save_best='bbox_mAP')
