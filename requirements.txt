@@ -35,12 +35,9 @@ macaroonbakery
 Mako
 MarkupSafe
 matplotlib
-mmcls==0.25.0
-mmcv-full==1.7.0
 more-itertools
 netifaces
 numpy==1.24.2
-nvidia-cublas-cu11==11.10.3.66
 nvidia-cuda-nvrtc-cu11==11.7.99
 nvidia-cuda-runtime-cu11==11.7.99
 nvidia-cudnn-cu11==8.5.0.96
@@ -79,7 +76,7 @@ SecretStorage
 sentry-sdk
 setproctitle
 six
-smmap==5.0.0
+smmap
 terminaltables
 tomli
 torch==1.13.1
@@ -94,4 +91,5 @@ wcwidth
 xdg
 yapf
 zipp
-
+mmcv-full
+mmcls

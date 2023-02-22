@@ -2,7 +2,7 @@ with open('requirements.txt', 'r') as f:
     data = f.read()
     f.close()
 
-excludes = ['nvidia', 'torch', 'numpy', 'mm', 'wandb']
+excludes = ['nvidia', 'torch', 'numpy', 'wandb']
 
 new_data = f''
 
