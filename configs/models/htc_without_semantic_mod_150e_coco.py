@@ -1,6 +1,6 @@
 _base_ = [
     '../datasets/spike_instance.py',
-    '../../../mmdetection/configs/_base_/default_runtime.py',
+    '../../mmdetection/configs/_base_/default_runtime.py',
     '../schedules/schedule_150e.py'
 ]
 device = 'cuda'
