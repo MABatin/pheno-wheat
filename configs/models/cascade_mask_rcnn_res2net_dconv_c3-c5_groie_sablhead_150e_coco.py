@@ -16,7 +16,7 @@ model = dict(
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='/home/leon/pheno-wheat/checkpoints/Downloaded/res2net50_26w_4s-06e79181.pth'),
+        init_cfg=dict(type='Pretrained', checkpoint='https://public.dm.files.1drv.com/y4mvnOE8Lc4jb9msqFV5GtyYk4Y0qSaiS0GSIaZFZX0c7l7-SfCEqTnNsDMQOZW6MIWfRf4RtPv1eidAohWP3OvtHLJyeDgo8w5JU0KSVd_vQ--5SWkxtXBk8R0nzJZfd0s81oTcnHsjAwz11DjXeVxGLsaeHaMe9jZ15XWmNqekBL2BGsa4hWxXGv33PCNj7ezWVp4zvlhNiBgb6TzMvvpYs3FGQbxFHgU-ei0l0lzBDQ'),
         # init_cfg=None,
         dcn=dict(type='DCN', deform_groups=1, fallback_on_stride=False),
         stage_with_dcn=(False, True, True, True)),
