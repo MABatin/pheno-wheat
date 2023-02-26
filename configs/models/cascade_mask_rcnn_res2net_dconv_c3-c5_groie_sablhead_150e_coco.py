@@ -4,11 +4,11 @@ _base_ = [
     '../schedules/schedule_150e.py'
 ]
 data = dict(
-    samples_per_gpu=2)
+    samples_per_gpu=1)
 model = dict(
     type='CascadeRCNN',
     backbone=dict(
-        type='ResNet',
+        type='Res2Net',
         depth=50,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
@@ -16,9 +16,9 @@ model = dict(
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50'),
+        init_cfg=dict(type='Pretrained', checkpoint='/home/leon/pheno-wheat/checkpoints/Downloaded/res2net50_26w_4s-06e79181.pth'),
         # init_cfg=None,
-        dcn=dict(type='DCNv2', deform_groups=1, fallback_on_stride=False),
+        dcn=dict(type='DCN', deform_groups=1, fallback_on_stride=False),
         stage_with_dcn=(False, True, True, True)),
     neck=[
         dict(
@@ -51,10 +51,26 @@ model = dict(
         num_stages=3,
         stage_loss_weights=[1, 0.5, 0.25],
         bbox_roi_extractor=dict(
-            type='SingleRoIExtractor',
-            roi_layer=dict(type='RoIAlign', output_size=7, sampling_ratio=0),
+            type='GenericRoIExtractor',
+            aggregation='sum',
+            roi_layer=dict(type='RoIAlign', output_size=7, sampling_ratio=2),
             out_channels=256,
-            featmap_strides=[4, 8, 16, 32]),
+            featmap_strides=[4, 8, 16, 32],
+            pre_cfg=dict(
+                type='ConvModule',
+                in_channels=256,
+                out_channels=256,
+                kernel_size=5,
+                padding=2,
+                inplace=False,
+            ),
+            post_cfg=dict(
+                type='GeneralizedAttention',
+                in_channels=256,
+                spatial_range=-1,
+                num_heads=6,
+                attention_type='0100',
+                kv_stride=2)),
         bbox_head=[
             dict(
                 type='SABLHead',
@@ -135,10 +151,25 @@ model = dict(
                 loss_bbox_reg=dict(type='SmoothL1Loss', beta=0.1, loss_weight=1.0))
         ],
         mask_roi_extractor=dict(
-            type='SingleRoIExtractor',
-            roi_layer=dict(type='RoIAlign', output_size=14, sampling_ratio=0),
+            type='GenericRoIExtractor',
+            roi_layer=dict(type='RoIAlign', output_size=14, sampling_ratio=2),
             out_channels=256,
-            featmap_strides=[4, 8, 16, 32]),
+            featmap_strides=[4, 8, 16, 32],
+            pre_cfg=dict(
+                type='ConvModule',
+                in_channels=256,
+                out_channels=256,
+                kernel_size=5,
+                padding=2,
+                inplace=False,
+            ),
+            post_cfg=dict(
+                type='GeneralizedAttention',
+                in_channels=256,
+                spatial_range=-1,
+                num_heads=6,
+                attention_type='0100',
+                kv_stride=2)),
         mask_head=dict(
             type='FCNMaskHead',
             num_convs=4,
@@ -238,9 +269,26 @@ model = dict(
 
 # load_from = 'Wheat/checkpoints/Downloaded/cascade_rcnn_r50_fpn_20e_coco_bbox_mAP-0.41_20200504_175131-e9872a90.pth'
 # Set up working dir to save files and logs.
-work_dir = 'work_dirs/cascade_mask_rcnn_mod_mdconv'
+work_dir = 'work_dirs/cascade_mask_rcnn_mod_dconv'
 # resume_from = work_dir + 'epoch_18.pth'
-TAGS = ['150 epochs']
+# log_config = dict(
+#     interval=1,
+#     hooks=[
+#         dict(type='TextLoggerHook'),
+#         dict(
+#             type='WandbLoggerHook',
+#             init_kwargs={'entity': 'unholytsar',
+#                          'project': 'SpikeInstance',
+#                          'name': 'cascade_mask_rcnn_mod_dconv_c3-c5_250e',
+#                          'dir': work_dir,
+#                          'resume': 'allow',
+#                          'id': '2ksi3serejio'},
+#             interval=1)])
+# PROJECT = 'SpikeInstance'
+# ENTITY = 'unholytsar'
+# NAME = 'cascade_mask_rcnn_mod_dconv_c3-c5_groie_sablhead_150e'
+# ID = '2ksi3sere451eww'  # change for different runs
+TAGS = ['150 epochs', 'pretrained backbone']
 log_config = dict(
     interval=1,
     hooks=[
@@ -257,7 +305,7 @@ log_config = dict(
             log_checkpoint_metadata=False)])
 
 auto_scale_lr = dict(enable=False, base_batch_size=16)
-optimizer = dict(lr=0.00125)
+optimizer = dict(lr=0.005)
 # Change the evaluation metric since we use customized dataset.
 # We can set the evaluation interval to reduce the evaluation times
 evaluation = dict(interval=1, metric=['bbox', 'segm'], save_best='bbox_mAP')

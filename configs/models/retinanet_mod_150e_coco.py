@@ -1,5 +1,5 @@
 _base_ = [
-    '../datasets/spike_instance.py',
+    '../datasets/spike_detection.py',
     '../../mmdetection/configs/_base_/default_runtime.py',
     '../schedules/schedule_150e.py'
 ]
@@ -18,22 +18,16 @@ model = dict(
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50'),
-        dcn=dict(type='DCN', deform_groups=1, fallback_on_stride=False),
-        stage_with_dcn=(False, True, True, True)),
-    neck=[
-        dict(
-            type='FPN',
-            in_channels=[256, 512, 1024, 2048],
-            out_channels=256,
-            num_outs=5),
-        dict(
-            type='BFP',
-            in_channels=256,
-            num_levels=5)],
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
+    neck=
+    dict(
+        type='FPN',
+        in_channels=[256, 512, 1024, 2048],
+        out_channels=256,
+        num_outs=5),
     bbox_head=dict(
         type='RetinaHead',
-        num_classes=80,
+        num_classes=1,
         in_channels=256,
         stacked_convs=4,
         feat_channels=256,
@@ -58,9 +52,9 @@ model = dict(
     train_cfg=dict(
         assigner=dict(
             type='MaxIoUAssigner',
-            pos_iou_thr=0.5,
-            neg_iou_thr=0.4,
-            min_pos_iou=0,
+            pos_iou_thr=0.7,
+            neg_iou_thr=0.5,
+            min_pos_iou=0.5,
             ignore_iof_thr=-1),
         allowed_border=-1,
         pos_weight=-1,
@@ -68,13 +62,12 @@ model = dict(
     test_cfg=dict(
         nms_pre=1000,
         min_bbox_size=0,
-        score_thr=0.05,
+        score_thr=0.5,
         nms=dict(type='nms', iou_threshold=0.5),
         max_per_img=100))
 
-
 # Set up working dir to save files and logs.
-work_dir = 'Wheat/work_dirs/retinanet/'
+work_dir = 'work_dirs/retinanet'
 # resume_from = work_dir+'epoch_201.pth'  # change to work_dir+'latest.pth' if training is interrupted
 TAGS = ['150 epochs']
 log_config = dict(

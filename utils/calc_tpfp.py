@@ -60,6 +60,17 @@ def tpfp2json(cfg, dataset, outputs, tpfp_prefix, iou_thr):
             img_dict['true_positive'] = img_tp
             img_dict['false_positive'] = img_fp
             img_dict['false_negative'] = gt_bboxes.shape[0] - img_tp
+
+            img_precision = img_tp / det
+            img_recall = img_tp / gt
+            img_accuracy = img_tp / (gt + img_fp)
+            img_f1_score = (2 * img_precision * img_recall) / (img_precision + img_recall)
+
+            img_dict['img_precision'] = round(img_precision, 4)
+            img_dict['img_recall'] = round(img_recall, 4)
+            img_dict['img_accuracy'] = round(img_accuracy, 4)
+            img_dict['img_f1_score'] = round(img_f1_score, 4)
+
             json_dict['images'].append(img_dict)
         except Exception as e:
             print(e)
