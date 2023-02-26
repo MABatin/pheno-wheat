@@ -12,4 +12,4 @@
 \artifacts
 #\app
 *.json
-
+/DetVisGUI/

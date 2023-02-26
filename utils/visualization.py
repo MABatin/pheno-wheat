@@ -20,9 +20,12 @@ from typing import List, Optional, Tuple, Union
 COLORS = [(220, 20, 60), (119, 11, 32), (0, 0, 142), (0, 0, 230),
           (106, 0, 228), (0, 60, 100), (0, 80, 100), (0, 0, 70),
           (0, 0, 192), (250, 170, 30)]
-DEVICE = 'cpu'
+DEVICE = 'cuda'
 
 
+# TODO : visualization by reading from result.pkl file
+
+# TODO: add argument for drawing gt_bbox and det_bbox together
 def draw_bounding_boxes_new(
         image: torch.Tensor,
         boxes: torch.Tensor,
@@ -161,7 +164,68 @@ def poly2mask(mask_ann, img_h, img_w):
     return mask
 
 
-def draw_bbox_masks(cfg, dataset=None, save_dir=str, split=None, outputs=None, show_score_thr=0):
+def get_iou(BBGT, det, iou_threshold):
+    ious = []
+    # GT = self.data_info.get_singleImg_gt(self.img_name)
+
+    for idx, cls_objs in enumerate(det):
+
+        # category = self.data_info.aug_category.category[idx]
+        # BBGT = []
+        # for t in GT:
+        #     if not t[0] == category: continue
+        #     BBGT.append([t[1], t[2], t[1] + t[3], t[2] + t[4]])
+        # BBGT = np.asarray(BBGT)
+        d = [0] * len(BBGT)  # for check 1 GT map to several det
+        #
+        confidence = cls_objs[:, 4]
+        BB = cls_objs[:, :4]  # bounding box
+
+        # sort by confidence
+        sorted_ind = np.argsort(-confidence)
+        sorted_scores = np.sort(-confidence)
+        BB = BB[sorted_ind, :]
+
+        # for returning original order
+        ind_table = {i: sorted_ind[i] for i in range(len(sorted_ind))}
+
+        iou = np.zeros_like(confidence)
+
+        if len(BBGT) > 0:
+            for i in range(len(BB)):
+                bb = BB[i, :]
+
+                # compute overlaps
+                # intersection
+                ixmin = np.maximum(BBGT[:, 0], bb[0])
+                iymin = np.maximum(BBGT[:, 1], bb[1])
+                ixmax = np.minimum(BBGT[:, 2], bb[2])
+                iymax = np.minimum(BBGT[:, 3], bb[3])
+                iw = np.maximum(ixmax - ixmin + 1., 0.)
+                ih = np.maximum(iymax - iymin + 1., 0.)
+                inters = iw * ih
+
+                # union
+                uni = ((bb[2] - bb[0] + 1.) * (bb[3] - bb[1] + 1.) +
+                       (BBGT[:, 2] - BBGT[:, 0] + 1.) * (BBGT[:, 3] - BBGT[:, 1] + 1.) -
+                       inters)
+
+                overlaps = inters / uni
+                ovmax = np.max(overlaps)  # max overlaps with all gt
+                jmax = np.argmax(overlaps)
+
+                if ovmax > iou_threshold:
+                    if not d[jmax]:
+                        d[jmax] = 1
+                    else:  # multiple bounding boxes map to one gt
+                        ovmax = -ovmax
+
+                iou[ind_table[i]] = ovmax  # return to unsorted order
+            ious.append(iou)
+    return ious
+
+
+def draw_bbox_masks(cfg, dataset=None, save_dir=str, split=None, outputs=None, show_score_thr=0, iou_thr=0.5):
     mmcv.mkdir_or_exist(save_dir)
 
     try:
@@ -218,8 +282,10 @@ def draw_bbox_masks(cfg, dataset=None, save_dir=str, split=None, outputs=None, s
                     img = read_image(image_path)
                     img_h = dataset.data_infos[idx]['height']
                     img_w = dataset.data_infos[idx]['width']
+                    gt_bboxes = dataset.get_ann_info(idx)['bboxes']
                     # bboxes = torch.from_numpy(output[0][:, :4]).to(device=DEVICE, dtype=torch.float32)
                     bbox_results, segm_results = output
+                    ious = get_iou(gt_bboxes, bbox_results, iou_threshold=iou_thr)
                     for i, (bbox_result, mask_results) in enumerate(zip(bbox_results, segm_results)):
                         scores = torch.from_numpy(bbox_result[:, 4]).to(device=DEVICE, dtype=torch.float32)
                         bboxes = torch.from_numpy(bbox_result[:, :4]).to(device=DEVICE, dtype=torch.float32)
@@ -244,9 +310,16 @@ def draw_bbox_masks(cfg, dataset=None, save_dir=str, split=None, outputs=None, s
                                 mask_colors.append(next(y_cycle))
                         else:
                             mask_colors = [dataset.PALETTE[i]] * masks.shape[0]
-                        bbox_colors = [(240, 10, 10)] * bboxes.shape[0]
+                        tp_color = (240, 240, 10)
+                        fp_color = (240, 10, 10)
+                        bbox_colors = [()] * bboxes.shape[0]
+                        for k in range(len(bbox_colors)):
+                            if ious[i][k] >= iou_thr:
+                                bbox_colors[k] = tp_color
+                            else:
+                                bbox_colors[k] = fp_color
                         img = draw_segmentation_masks(img, masks, alpha=0.5, colors=mask_colors)
-                        img = draw_bounding_boxes_new(img, bboxes, width=5, labels=labels, colors=bbox_colors,
+                        img = draw_bounding_boxes_new(img, bboxes, width=4, labels=labels, colors=bbox_colors,
                                                       font="/usr/share/fonts/truetype/abyssinica/AbyssinicaSIL-Regular.ttf",
                                                       font_size=10)
                     img = T.ToPILImage()(img)
