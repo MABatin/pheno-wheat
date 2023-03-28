@@ -1,12 +1,12 @@
 {
     "path": "tools/detector/train.py",
-    "config": "path/to/model/config",
+    "config": "/pheno-wheat/configs/models/WheatSpikeNet.py",
     "cfg-options": {
         "resume_from": "None",
         "log_config": {
-            "PROJECT": "SpikeInstance",
-            "ENTITY": "unholytsar",
-            "NAME": "model_name",
+            "PROJECT": "",
+            "ENTITY": "",
+            "NAME": "",
             "ID": "random_string_for_diff_run (e.g. 2390dlkjw0)"
         }
     }
