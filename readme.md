@@ -57,5 +57,13 @@ Run `./test_spike.sh` to test the model specified in the `test_spike.json` file 
 
 ### 2. Spikelet Segmentation
 
-_Ongoing project_
+
+Download the [Spikelet segmentation dataset]()
+
+- [ ] Complete the spikelet annotation 
+- [ ] Write scripts for training and testing spikelet segmentation models
+- [ ] Explore different semantic segmentation architectures (including U-net)
+- [ ] Compare results
+- [ ] Publish another paper 
+
 
