@@ -55,9 +55,9 @@ Run `./test_spike.sh` to test the model specified in the `test_spike.json` file 
 *config* loaded from the checkpoint file specified under the key *checkpoint*. \
 (create from `test_spike.json.template`)
 
-### 2. Spikelet Segmentation
+To run inference on a single image in `demo/` folder, run `./inference.sh`. 
 
-Download the [Spikelet segmentation dataset]()
+### 2. Spikelet Segmentation
 
 _Ongoing project_
 
