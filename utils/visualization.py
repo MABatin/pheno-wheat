@@ -26,6 +26,7 @@ DEVICE = 'cuda'
 # TODO : visualization by reading from result.pkl file
 
 # TODO: add argument for drawing gt_bbox and det_bbox together
+# TODO: add visualization for FN
 def draw_bounding_boxes_new(
         image: torch.Tensor,
         boxes: torch.Tensor,
