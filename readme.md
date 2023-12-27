@@ -9,24 +9,27 @@ After cloning the repo:\
 `source envwheat/bin/activate` to activate virtual environment\
 Use `pip install -r requirements.txt` to install all the requirements
 
+### Additional
+1. Follow the [CUDA Installation Guide](https://gist.github.com/Mahedi-61/2a2f1579d4271717d421065168ce6a73)
+2. ```commandline
+   pip install torch==1.13.1+cu{version} torchvision==0.14.1+cu{version} torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu{version}
+    ```
+3. ```commandline
+   mim install mmcv==1.6.1
+    ```
+
 Install mmdetection and mmsegmentation by following:
 1. mmdetection
 ````
-git clone https://github.com/open-mmlab/mmdetection.git
+git clone https://github.com/open-mmlab/mmdetection.git --branch v2.28.0 --single-branch
 cd mmdetection
 pip install -v -e .
-# "-v" means verbose, or more output
-# "-e" means installing a project in editable mode,
-# thus any local modifications made to the code will take effect without reinstallation.
 ````
 2. mmsegmentation
 ````
-git clone https://github.com/open-mmlab/mmsegmentation.git
+git clone https://github.com/open-mmlab/mmsegmentation.git --branch v0.30.0 --single-branch
 cd mmsegmentation
 pip install -v -e .
-# "-v" means verbose, or more output
-# "-e" means installing a project in editable mode,
-# thus any local modifications made to the code will take effect without reinstallation.
 ````
 # Instructions
 
@@ -45,17 +48,17 @@ pheno-wheat
 │       └── val
 └── ...
 ```
-Run `./train_spike.sh` to train a model specified in the `train_spike.json` file under the key
+Run `bash train_spike.sh` to train a model specified in the `train_spike.json` file under the key
 *config*.\
 (create from `train_spike.json.template`)
 
 (if permission denied error shows up use the command `chmod +x ./train_spike.sh`)
 
-Run `./test_spike.sh` to test the model specified in the `test_spike.json` file under the key 
+Run `bash test_spike.sh` to test the model specified in the `test_spike.json` file under the key 
 *config* loaded from the checkpoint file specified under the key *checkpoint*. \
 (create from `test_spike.json.template`)
 
-To run inference on a single image in `demo/` folder, run `./inference.sh`. 
+To run inference on a single image in `demo/` folder, run `bash inference.sh`. 
 
 ### 2. Spikelet Segmentation
 

@@ -1,6 +1,6 @@
 {
     "path": "tools/detector/train.py",
-    "config": "/pheno-wheat/configs/models/WheatSpikeNet.py",
+    "config": "configs/models/WheatSpikeNet.py",
     "cfg-options": {
         "resume_from": "None",
         "log_config": {
